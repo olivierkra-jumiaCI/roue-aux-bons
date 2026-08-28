@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 import './wheel.css'; // We'll create this next
 
 const segments = [
-  { text: '10 000 FCFA', color: '#10b981', isWinner: true },
-  { text: 'Dommage', color: '#ef4444', isWinner: false },
-  { text: '10 000 FCFA', color: '#3b82f6', isWinner: true },
-  { text: 'Perdu', color: '#ef4444', isWinner: false },
-  { text: '10 000 FCFA', color: '#f59e0b', isWinner: true },
-  { text: 'Pas de chance', color: '#ef4444', isWinner: false }
+  { text: '10 000 FCFA', isWinner: true },
+  { text: 'Dommage', isWinner: false },
+  { text: '10 000 FCFA', isWinner: true },
+  { text: 'Perdu', isWinner: false },
+  { text: '10 000 FCFA', isWinner: true },
+  { text: 'Pas de chance', isWinner: false }
 ];
 
 export default function Wheel() {
@@ -103,17 +103,17 @@ export default function Wheel() {
           <div className="pointer"></div>
           <div className="wheel" ref={wheelRef}>
             {segments.map((segment, index) => {
-              const rotation = (360 / segments.length) * index;
+              const rotation = 30 + (360 / segments.length) * index;
+              const textColor = segment.isWinner ? '#ffffff' : '#282828';
               return (
                 <div 
                   key={index} 
                   className="segment" 
                   style={{
-                    transform: `rotate(${rotation}deg)`,
-                    backgroundColor: segment.color
+                    transform: `rotate(${rotation}deg)`
                   }}
                 >
-                  <span className="segment-text">{segment.text}</span>
+                  <span className="segment-text" style={{ color: textColor }}>{segment.text}</span>
                 </div>
               );
             })}
