@@ -9,7 +9,7 @@ export default function LoginForm() {
     name: '',
     email: '',
     phone: '',
-    address: ''
+    address: 'Non renseignée'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,27 +25,34 @@ export default function LoginForm() {
     setError('');
 
     try {
-      const res = await fetch('/api/auth', {
+      const response = await fetch('/api/auth', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email: formData.email }),
       });
 
-      const data = await res.json();
+      const data = await response.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Une erreur est survenue');
+      if (data.error) {
+        setError(data.error);
+        setLoading(false);
+        return;
       }
 
       if (data.hasPlayed) {
         setAlreadyPlayed(true);
       } else {
-        // Save user info to sessionStorage for the game page
-        sessionStorage.setItem('playerInfo', JSON.stringify(formData));
+        // Save user info for the game page
+        sessionStorage.setItem('joueur', JSON.stringify(formData));
+        
+        // Redirect to play page
         router.push('/play');
       }
+
     } catch (err) {
-      setError(err.message);
+      setError('Une erreur est survenue lors de la connexion.');
     } finally {
       setLoading(false);
     }
@@ -53,22 +60,27 @@ export default function LoginForm() {
 
   if (alreadyPlayed) {
     return (
-      <div className="glass-panel animate-fade-in" style={{ textAlign: 'center' }}>
-        <h2 style={{ color: '#fca5a5', marginBottom: '1rem' }}>Déjà joué !</h2>
-        <p style={{ fontSize: '1.2rem', lineHeight: '1.6' }}>
+      <div className="glass-panel animate-fade-in" style={{ textAlign: 'center', maxWidth: '400px', margin: '0 auto' }}>
+        <h2 style={{ color: '#ef4444', marginBottom: '1rem', fontWeight: '900' }}>Déjà joué !</h2>
+        <p style={{ fontSize: '1.2rem', lineHeight: '1.6', color: '#282828' }}>
           Vous avez déjà tourné la roue aujourd'hui.<br />
-          Revenez encore demain pour demain !
+          Revenez encore demain pour une nouvelle chance !
         </p>
       </div>
     );
   }
 
   return (
-    <div className="glass-panel">
-      {error && <div className="error-msg">{error}</div>}
+    <div className="glass-panel" style={{ maxWidth: '400px', margin: '0 auto' }}>
+      <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: '#f68b1e', fontSize: '1.8rem', fontWeight: '900' }}>
+        Connexion
+      </h2>
+      
+      {error && <div className="error-msg animate-fade-in">{error}</div>}
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label" htmlFor="name">Nom complet</label>
+          <label className="form-label" htmlFor="name">Nom Complet</label>
           <input
             type="text"
             id="name"
@@ -77,9 +89,9 @@ export default function LoginForm() {
             required
             value={formData.name}
             onChange={handleChange}
-            placeholder="Jean Dupont"
           />
         </div>
+
         <div className="form-group">
           <label className="form-label" htmlFor="email">Adresse Email</label>
           <input
@@ -90,11 +102,11 @@ export default function LoginForm() {
             required
             value={formData.email}
             onChange={handleChange}
-            placeholder="jean@exemple.com"
           />
         </div>
+
         <div className="form-group">
-          <label className="form-label" htmlFor="phone">Numéro de téléphone</label>
+          <label className="form-label" htmlFor="phone">Numéro de Téléphone</label>
           <input
             type="tel"
             id="phone"
@@ -103,30 +115,16 @@ export default function LoginForm() {
             required
             value={formData.phone}
             onChange={handleChange}
-            placeholder="+225 0102030405"
           />
         </div>
-        <div className="form-group">
-          <label className="form-label" htmlFor="address">Adresse de livraison</label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            className="form-input"
-            required
-            value={formData.address}
-            onChange={handleChange}
-            placeholder="Abidjan, Cocody..."
-          />
-        </div>
-        
+
         <button 
           type="submit" 
           className="btn-primary" 
           style={{ width: '100%', marginTop: '1rem' }}
           disabled={loading}
         >
-          {loading ? 'Vérification...' : 'Jouer maintenant'}
+          {loading ? 'Vérification...' : 'Continuer'}
         </button>
       </form>
     </div>
