@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import './wheel.css'; // We'll create this next
+import './wheel.css';
 
 const segments = [
   { text: '10 000 FCFA', isWinner: true },
@@ -13,143 +12,142 @@ const segments = [
   { text: 'Pas de chance', isWinner: false }
 ];
 
-export default function Wheel() {
-  const router = useRouter();
+export default function Wheel({ onSpinComplete }) {
   const [isSpinning, setIsSpinning] = useState(false);
-  const [result, setResult] = useState(null);
-  const [playerInfo, setPlayerInfo] = useState(null);
-  const [error, setError] = useState('');
+  const [rotationAngle, setRotationAngle] = useState(0);
   const wheelRef = useRef(null);
-  const currentRotation = useRef(0);
 
+  // Clean up any stray classes on unmount
   useEffect(() => {
-    const info = sessionStorage.getItem('playerInfo');
-    if (!info) {
-      router.push('/');
-    } else {
-      setPlayerInfo(JSON.parse(info));
-    }
-  }, [router]);
+    return () => {
+      if (wheelRef.current) {
+        wheelRef.current.style.transition = 'none';
+      }
+    };
+  }, []);
 
   const spin = async () => {
-    if (isSpinning || result || !playerInfo) return;
+    if (isSpinning) return;
     setIsSpinning(true);
-    setError('');
 
-    // Pre-determine winner vs loser before spinning so we can land on the right slice
-    // Randomly pick an index
-    const targetIndex = Math.floor(Math.random() * segments.length);
-    const targetSegment = segments[targetIndex];
-    
-    // Calculate rotation
-    const sliceAngle = 360 / segments.length;
-    // We want the target segment to land at the top (0 degrees).
-    // Segment 0 is at 0 to 60. Center is 30.
-    // The top pointer is at -90 degrees relative to standard circle (or depends on CSS).
-    // Let's rely on standard CSS rotation where 0 is top.
-    
-    const spins = 5; // number of full rotations
-    const targetAngle = spins * 360 + (360 - (targetIndex * sliceAngle));
-    
-    // Adjust slightly so it doesn't land perfectly on the line
-    const offset = Math.floor(Math.random() * (sliceAngle - 10)) + 5; 
-    const finalRotation = currentRotation.current + targetAngle - offset;
-    
-    currentRotation.current = finalRotation;
-    
-    if (wheelRef.current) {
-      wheelRef.current.style.transition = 'transform 4s cubic-bezier(0.1, 0.7, 0.1, 1)';
-      wheelRef.current.style.transform = `rotate(${finalRotation}deg)`;
-    }
+    try {
+      // Fetch result from backend
+      const userStr = sessionStorage.getItem('joueur');
+      if (!userStr) {
+        alert("Erreur de session. Veuillez vous reconnecter.");
+        window.location.href = '/';
+        return;
+      }
+      const user = JSON.parse(userStr);
 
-    // Wait for animation to finish
-    setTimeout(async () => {
-      setIsSpinning(false);
+      // Randomly determine win or lose (50% chance)
+      const isWin = Math.random() > 0.5;
+      const resultAction = isWin ? 'Win' : 'Loss';
+
+      // Record spin
+      const res = await fetch('/api/spin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...user, result: resultAction })
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        alert("Erreur: " + data.error);
+        setIsSpinning(false);
+        return;
+      }
+
+      // Calculate rotation
+      const spins = 5; // Minimum 5 full spins
+      const baseRotation = spins * 360;
       
-      try {
-        const res = await fetch('/api/spin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...playerInfo,
-            result: targetSegment.isWinner ? 'Win' : 'Loss'
-          }),
-        });
+      // Determine target segment
+      const targetSegments = segments
+        .map((seg, idx) => ({ ...seg, originalIndex: idx }))
+        .filter(seg => seg.isWinner === isWin);
+      
+      const winningSegment = targetSegments[Math.floor(Math.random() * targetSegments.length)];
+      
+      // Calculate angle to land on the winning segment
+      const sliceAngle = 360 / segments.length;
+      // The pointer is at 0 degrees (top). We need the segment to land at 0 degrees.
+      // Segment N is drawn at (N * 60) degrees. So we rotate by -(N * 60).
+      const stopAngle = 360 - (winningSegment.originalIndex * sliceAngle);
+      
+      // Add random offset inside the slice to make it look natural (-20 to +20 degrees)
+      const randomOffset = Math.floor(Math.random() * 40) - 20;
+      
+      const finalRotation = rotationAngle + baseRotation + stopAngle + randomOffset;
+      setRotationAngle(finalRotation);
 
-        const data = await res.json();
-        
-        if (!res.ok) {
-          throw new Error(data.error || "Erreur lors de l'enregistrement");
-        }
-
-        setResult({
-          isWinner: targetSegment.isWinner,
+      // Wait for animation to finish (4 seconds)
+      setTimeout(() => {
+        setIsSpinning(false);
+        onSpinComplete({
+          isWinner: isWin,
           voucher: data.voucher
         });
-      } catch (err) {
-        setError(err.message);
-      }
-    }, 4000);
-  };
+      }, 4000);
 
-  if (!playerInfo) return null;
+    } catch (error) {
+      console.error("Spin error:", error);
+      alert("Une erreur est survenue.");
+      setIsSpinning(false);
+    }
+  };
 
   return (
     <div className="wheel-container">
-      {error && <div className="error-msg">{error}</div>}
-      
-      {!result ? (
-        <div className="wheel-wrapper">
-          <div className="pointer"></div>
-          <div className="wheel" ref={wheelRef}>
-            {segments.map((segment, index) => {
-              const rotation = 30 + (360 / segments.length) * index;
-              const textColor = segment.isWinner ? '#ffffff' : '#282828';
-              return (
-                <div 
-                  key={index} 
-                  className="segment" 
-                  style={{
-                    transform: `rotate(${rotation}deg)`
-                  }}
-                >
-                  <span className="segment-text" style={{ color: textColor }}>{segment.text}</span>
-                </div>
-              );
-            })}
-          </div>
-          
-          <button 
-            className="btn-accent spin-button" 
-            onClick={spin}
-            disabled={isSpinning}
-          >
-            {isSpinning ? '...' : 'Tourner'}
-          </button>
+      <div className="wheel-wrapper">
+        <div className="pointer"></div>
+        <div 
+          className="wheel-svg-container"
+          style={{
+            transform: `rotate(${rotationAngle}deg)`,
+            transition: isSpinning ? 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)' : 'none'
+          }}
+        >
+          <svg viewBox="0 0 340 340" width="100%" height="100%">
+            <g transform="translate(170, 170)">
+              {segments.map((segment, index) => {
+                const angle = index * 60;
+                return (
+                  <g key={index} transform={`rotate(${angle})`}>
+                    {/* 60-degree slice path (-30 to +30 degrees) */}
+                    <path 
+                      d="M 0 0 L -85 -147.22 A 170 170 0 0 1 85 -147.22 Z" 
+                      fill={segment.isWinner ? '#f68b1e' : '#ffffff'} 
+                      stroke="#282828"
+                      strokeWidth="2"
+                    />
+                    {/* Text rotated to follow radius */}
+                    <text 
+                      x="0" 
+                      y="-95" 
+                      textAnchor="middle" 
+                      alignmentBaseline="middle" 
+                      fill={segment.isWinner ? '#ffffff' : '#282828'}
+                      fontSize="17"
+                      fontWeight="900"
+                      transform="rotate(90 0 -95)"
+                    >
+                      {segment.text}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+          </svg>
         </div>
-      ) : (
-        <div className="glass-panel animate-fade-in text-center result-panel">
-          {result.isWinner ? (
-            <>
-              <h2 className="win-title">Félicitations {playerInfo.name} !</h2>
-              <div className="confetti">🎉</div>
-              <p>Vous avez gagné un bon d'achat de <strong>10 000 FCFA</strong> !</p>
-              <div className="voucher-card">
-                <p className="voucher-code">{result.voucher?.code || 'ERR_CODE'}</p>
-                <p className="voucher-terms">Valide pour une commande minimum de 30 000 FCFA, jusqu'au 31 Août.</p>
-              </div>
-              <p className="success-msg">Votre bon a été enregistré et vous sera envoyé !</p>
-            </>
-          ) : (
-            <>
-              <h2 className="lose-title">Oups...</h2>
-              <div className="sad-face">😢</div>
-              <p>Vous n'avez pas gagné cette fois-ci.</p>
-              <p>Merci pour votre participation {playerInfo.name}. Revenez demain pour retenter votre chance !</p>
-            </>
-          )}
-        </div>
-      )}
+        <button 
+          className="spin-button" 
+          onClick={spin}
+          disabled={isSpinning}
+        >
+          Tourner
+        </button>
+      </div>
     </div>
   );
 }

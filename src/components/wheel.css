@@ -11,6 +11,17 @@
   width: 340px;
   height: 340px;
   margin-bottom: 3rem;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  background-color: #282828;
+}
+
+.wheel-svg-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid #282828;
 }
 
 .pointer {
@@ -25,46 +36,6 @@
   border-top: 35px solid #282828;
   z-index: 10;
   filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
-}
-
-.wheel {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  position: relative;
-  overflow: hidden;
-  border: 8px solid #282828;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  background: conic-gradient(
-    #f68b1e 0deg 60deg,
-    #ffffff 60deg 120deg,
-    #f68b1e 120deg 180deg,
-    #ffffff 180deg 240deg,
-    #f68b1e 240deg 300deg,
-    #ffffff 300deg 360deg
-  );
-}
-
-.segment {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* We don't need background here since conic-gradient handles it */
-}
-
-.segment-text {
-  position: absolute;
-  top: 15px; /* Distance from outer edge */
-  left: 50%;
-  /* Center horizontally, then rotate text 90deg so it reads along the radius */
-  transform: translateX(-50%) rotate(90deg);
-  transform-origin: 50% 50%; /* Center of the text element */
-  color: #282828; /* Default text color for white slices */
-  font-weight: 900;
-  font-size: 1.1rem;
-  white-space: nowrap;
 }
 
 .spin-button {
