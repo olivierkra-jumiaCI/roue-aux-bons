@@ -124,8 +124,9 @@ body {
   .hero-container {
     flex-direction: column;
     text-align: center;
-    justify-content: center;
-    padding-top: 4rem;
+    justify-content: flex-start;
+    padding-top: 2rem;
+    gap: 1rem;
   }
 }
 
