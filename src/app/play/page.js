@@ -8,7 +8,7 @@ export default function PlayPage() {
           Roue <span>Aux</span><br/>coupons
         </h1>
         <h2 className="page-subtitle">
-          Des bons<br/>de réduction<br/>à gogo !
+          Tourne la roue
         </h2>
         <p style={{ fontSize: '0.9rem', color: '#fff', opacity: 0.9 }}>
           Offre soumise à condition
