@@ -23,7 +23,12 @@ export default function Wheel({ onSpinComplete }) {
 
   useEffect(() => {
     const userStr = sessionStorage.getItem('joueur');
-    if (userStr) setPlayerInfo(JSON.parse(userStr));
+    if (userStr) {
+      setPlayerInfo(JSON.parse(userStr));
+    } else {
+      // Redirect to login page if no player info is found
+      window.location.href = '/';
+    }
     
     return () => {
       if (wheelRef.current) {
