@@ -194,7 +194,7 @@ export default function Wheel({ onSpinComplete }) {
                   </div>
                 </div>
                 <p className="success-msg">
-                  Nous vous contacterons bientôt pour les détails.
+                  N'oubliez pas d'utiliser le code pour passer votre commande !
                 </p>
               </>
             ) : (
