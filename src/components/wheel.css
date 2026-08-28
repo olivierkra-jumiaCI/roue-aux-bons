@@ -1,19 +1,38 @@
+.wheel-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  max-width: 500px;
+  z-index: 10;
+}
+
 .wheel-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
+  position: relative;
+  width: 100%;
 }
 
 .wheel-wrapper {
   position: relative;
-  width: 360px;
-  height: 360px;
-  margin-bottom: 2rem;
+  width: 400px;
+  height: 400px;
   border-radius: 50%;
-  box-shadow: 0 0 60px rgba(246, 139, 30, 0.2), inset 0 0 20px rgba(0,0,0,0.5);
-  background-color: #111;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+  background-color: #ffffff;
+  z-index: 2;
+}
+
+@media (max-width: 600px) {
+  .wheel-wrapper {
+    width: 320px;
+    height: 320px;
+  }
 }
 
 .wheel-svg-container {
@@ -21,78 +40,92 @@
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  border: 8px solid #1a1a1a;
-  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+  border: 12px solid #ffffff; /* Thick white border */
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
 }
 
 .pointer {
   position: absolute;
-  top: -25px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -80%); /* Pointing up from center */
   width: 0; 
   height: 0; 
-  border-left: 25px solid transparent;
-  border-right: 25px solid transparent;
-  border-top: 45px solid #ffffff;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 25px solid #ffffff; /* White pointer like in image */
   z-index: 10;
-  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,255,255,0.3));
+  filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.2));
 }
 
-/* Pulsing spin button */
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 0 0 rgba(246, 139, 30, 0.7); }
-  70% { box-shadow: 0 0 0 20px rgba(246, 139, 30, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(246, 139, 30, 0); }
+/* The wheel stand */
+.wheel-stand {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 120px;
+  background: #ffffff;
+  /* Trapezoid shape */
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  z-index: 1;
+  box-shadow: 0 20px 20px rgba(0,0,0,0.2);
 }
 
+.wheel-stand-base {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 20px;
+  background: #f1f5f9;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+/* Spin button - White with Orange Star */
 .spin-button {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 5;
-  width: 90px;
-  height: 90px;
+  z-index: 15;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 900;
-  border: 6px solid #1a1a1a;
-  background: linear-gradient(135deg, #f68b1e 0%, #d8700a 100%);
-  color: white;
+  font-size: 2rem; /* Size for star */
+  border: none;
+  background: #ffffff;
+  color: var(--primary);
   cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 -4px 8px rgba(0,0,0,0.05);
   transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-  animation: pulseGlow 2s infinite;
 }
 
 .spin-button:hover:not(:disabled) {
   transform: translate(-50%, -50%) scale(1.1);
-  background: linear-gradient(135deg, #ff9d3b 0%, #e68012 100%);
-  animation: none;
-  box-shadow: 0 0 30px rgba(246, 139, 30, 0.6);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
 }
 
 .spin-button:disabled {
   opacity: 0.8;
   cursor: not-allowed;
-  animation: none;
-  background: #555;
-  color: #888;
-  box-shadow: none;
+  color: #ccc;
 }
 
 /* Premium Result Modal Overlay */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -108,22 +141,15 @@
   overflow: hidden;
 }
 
-/* For winners, add a subtle glowing border */
-.result-panel.winner {
-  border: 1px solid rgba(246, 139, 30, 0.5);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(246, 139, 30, 0.2);
-}
-
 .win-title {
-  color: #f68b1e;
+  color: var(--primary);
   font-size: 3rem;
   margin-bottom: 0.5rem;
   font-weight: 900;
-  text-shadow: 0 0 20px rgba(246, 139, 30, 0.4);
 }
 
 .lose-title {
-  color: #ffffff;
+  color: var(--text-dark);
   font-size: 2.5rem;
   margin-bottom: 1rem;
   font-weight: 900;
@@ -137,26 +163,24 @@
 }
 
 .voucher-card {
-  background: rgba(246, 139, 30, 0.1);
-  border: 2px dashed #f68b1e;
+  background: #fdf2e9;
+  border: 2px dashed var(--primary);
   border-radius: 12px;
   padding: 2rem;
   margin: 2rem 0;
-  position: relative;
 }
 
 .voucher-code {
   font-size: 2.5rem;
   font-weight: 900;
-  color: #ffffff;
+  color: var(--primary);
   letter-spacing: 4px;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 10px rgba(246, 139, 30, 0.5);
 }
 
 .voucher-terms {
   font-size: 0.95rem;
-  color: var(--text-muted);
+  color: #64748b;
 }
 
 .success-msg {

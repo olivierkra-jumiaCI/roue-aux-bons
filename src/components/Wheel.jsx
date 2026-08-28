@@ -5,12 +5,12 @@ import confetti from 'canvas-confetti';
 import './wheel.css';
 
 const segments = [
-  { text: '10 000 FCFA', isWinner: true },
-  { text: 'Dommage', isWinner: false },
-  { text: '10 000 FCFA', isWinner: true },
-  { text: 'Perdu', isWinner: false },
-  { text: '10 000 FCFA', isWinner: true },
-  { text: 'Pas de chance', isWinner: false }
+  { text: "BON D'ACHAT", isWinner: true },
+  { text: 'REJOUEZ', isWinner: false },
+  { text: "BON D'ACHAT", isWinner: true },
+  { text: 'REJOUEZ', isWinner: false },
+  { text: "BON D'ACHAT", isWinner: true },
+  { text: 'REJOUEZ', isWinner: false }
 ];
 
 export default function Wheel({ onSpinComplete }) {
@@ -42,14 +42,14 @@ export default function Wheel({ onSpinComplete }) {
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ['#f68b1e', '#ffffff', '#282828']
+        colors: ['#f68b1e', '#8b5cf6', '#ffffff']
       });
       confetti({
         particleCount: 5,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ['#f68b1e', '#ffffff', '#282828']
+        colors: ['#f68b1e', '#8b5cf6', '#ffffff']
       });
 
       if (Date.now() < end) {
@@ -110,7 +110,6 @@ export default function Wheel({ onSpinComplete }) {
         setShowResultModal(true);
         if (isWin) triggerConfetti();
         
-        // Let parent know to maybe update state (but we handle display here now via modal)
         if(onSpinComplete) onSpinComplete({ isWinner: isWin, voucher: data.voucher });
       }, 4000);
 
@@ -123,53 +122,57 @@ export default function Wheel({ onSpinComplete }) {
 
   return (
     <>
-      <div className="wheel-container">
-        <div className="wheel-wrapper">
-          <div className="pointer"></div>
-          <div 
-            className="wheel-svg-container"
-            style={{
-              transform: `rotate(${rotationAngle}deg)`,
-              transition: isSpinning ? 'transform 4s cubic-bezier(0.2, 0.8, 0.1, 1)' : 'none'
-            }}
-          >
-            <svg viewBox="0 0 340 340" width="100%" height="100%">
-              <g transform="translate(170, 170)">
-                {segments.map((segment, index) => {
-                  const angle = index * 60;
-                  return (
-                    <g key={index} transform={`rotate(${angle})`}>
-                      <path 
-                        d="M 0 0 L -85 -147.22 A 170 170 0 0 1 85 -147.22 Z" 
-                        fill={segment.isWinner ? '#f68b1e' : '#e2e8f0'} 
-                        stroke="#1a1a1a"
-                        strokeWidth="2"
-                      />
-                      <text 
-                        x="0" 
-                        y="-95" 
-                        textAnchor="middle" 
-                        alignmentBaseline="middle" 
-                        fill={segment.isWinner ? '#ffffff' : '#1a1a1a'}
-                        fontSize="17"
-                        fontWeight="900"
-                        transform="rotate(90 0 -95)"
-                      >
-                        {segment.text}
-                      </text>
-                    </g>
-                  );
-                })}
-              </g>
-            </svg>
+      <div className="wheel-section">
+        <div className="wheel-container">
+          <div className="wheel-wrapper">
+            <div className="pointer"></div>
+            <div 
+              className="wheel-svg-container"
+              style={{
+                transform: `rotate(${rotationAngle}deg)`,
+                transition: isSpinning ? 'transform 4s cubic-bezier(0.2, 0.8, 0.1, 1)' : 'none'
+              }}
+            >
+              <svg viewBox="0 0 340 340" width="100%" height="100%">
+                <g transform="translate(170, 170)">
+                  {segments.map((segment, index) => {
+                    const angle = index * 60;
+                    return (
+                      <g key={index} transform={`rotate(${angle})`}>
+                        <path 
+                          d="M 0 0 L -85 -147.22 A 170 170 0 0 1 85 -147.22 Z" 
+                          fill={segment.isWinner ? '#8b5cf6' : '#f68b1e'} 
+                          stroke="#ffffff"
+                          strokeWidth="2"
+                        />
+                        <text 
+                          x="0" 
+                          y="-95" 
+                          textAnchor="middle" 
+                          alignmentBaseline="middle" 
+                          fill="#ffffff"
+                          fontSize="18"
+                          fontWeight="900"
+                          transform="rotate(90 0 -95)"
+                        >
+                          {segment.text}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              </svg>
+            </div>
+            <button 
+              className="spin-button" 
+              onClick={spin}
+              disabled={isSpinning || showResultModal}
+            >
+              ⭐
+            </button>
           </div>
-          <button 
-            className="spin-button" 
-            onClick={spin}
-            disabled={isSpinning || showResultModal}
-          >
-            Tourner
-          </button>
+          <div className="wheel-stand"></div>
+          <div className="wheel-stand-base"></div>
         </div>
       </div>
 
@@ -180,7 +183,7 @@ export default function Wheel({ onSpinComplete }) {
               <>
                 <h2 className="win-title">Félicitations !</h2>
                 <div className="emoji-lg">🎁</div>
-                <p style={{ fontSize: '1.2rem', marginBottom: '1rem', color: '#fff' }}>
+                <p style={{ fontSize: '1.2rem', marginBottom: '1rem' }}>
                   Bravo {playerInfo?.name} ! Vous gagnez un bon d'achat.
                 </p>
                 <div className="voucher-card">
@@ -198,7 +201,7 @@ export default function Wheel({ onSpinComplete }) {
               <>
                 <h2 className="lose-title">Oups...</h2>
                 <div className="emoji-lg">🥺</div>
-                <p style={{ fontSize: '1.2rem', color: '#cbd5e1', lineHeight: '1.6' }}>
+                <p style={{ fontSize: '1.2rem', lineHeight: '1.6' }}>
                   Vous n'avez pas gagné cette fois-ci.<br/>
                   Merci pour votre participation {playerInfo?.name}.<br/>
                   Revenez demain pour retenter votre chance !
