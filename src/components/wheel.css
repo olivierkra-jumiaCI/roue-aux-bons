@@ -3,17 +3,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .wheel-wrapper {
   position: relative;
-  width: 340px;
-  height: 340px;
-  margin-bottom: 3rem;
+  width: 360px;
+  height: 360px;
+  margin-bottom: 2rem;
   border-radius: 50%;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  background-color: #282828;
+  box-shadow: 0 0 60px rgba(246, 139, 30, 0.2), inset 0 0 20px rgba(0,0,0,0.5);
+  background-color: #111;
 }
 
 .wheel-svg-container {
@@ -21,21 +21,29 @@
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  border: 5px solid #282828;
+  border: 8px solid #1a1a1a;
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
 }
 
 .pointer {
   position: absolute;
-  top: -20px;
+  top: -25px;
   left: 50%;
   transform: translateX(-50%);
   width: 0; 
   height: 0; 
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 35px solid #282828;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-top: 45px solid #ffffff;
   z-index: 10;
-  filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5)) drop-shadow(0 0 10px rgba(255,255,255,0.3));
+}
+
+/* Pulsing spin button */
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(246, 139, 30, 0.7); }
+  70% { box-shadow: 0 0 0 20px rgba(246, 139, 30, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(246, 139, 30, 0); }
 }
 
 .spin-button {
@@ -44,78 +52,111 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 5;
-  width: 85px;
-  height: 85px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 900;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  border: 5px solid #282828;
-  background: #f68b1e;
+  border: 6px solid #1a1a1a;
+  background: linear-gradient(135deg, #f68b1e 0%, #d8700a 100%);
   color: white;
   cursor: pointer;
   text-transform: uppercase;
-  transition: all 0.2s ease;
+  letter-spacing: 1px;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: pulseGlow 2s infinite;
 }
 
 .spin-button:hover:not(:disabled) {
-  transform: translate(-50%, -50%) scale(1.05);
-  background: #e07b19;
+  transform: translate(-50%, -50%) scale(1.1);
+  background: linear-gradient(135deg, #ff9d3b 0%, #e68012 100%);
+  animation: none;
+  box-shadow: 0 0 30px rgba(246, 139, 30, 0.6);
 }
 
 .spin-button:disabled {
   opacity: 0.8;
   cursor: not-allowed;
+  animation: none;
+  background: #555;
+  color: #888;
+  box-shadow: none;
+}
+
+/* Premium Result Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
 
 .result-panel {
-  max-width: 500px;
+  max-width: 450px;
   width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* For winners, add a subtle glowing border */
+.result-panel.winner {
+  border: 1px solid rgba(246, 139, 30, 0.5);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(246, 139, 30, 0.2);
 }
 
 .win-title {
   color: #f68b1e;
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
   font-weight: 900;
+  text-shadow: 0 0 20px rgba(246, 139, 30, 0.4);
 }
 
 .lose-title {
-  color: #282828;
+  color: #ffffff;
   font-size: 2.5rem;
   margin-bottom: 1rem;
   font-weight: 900;
 }
 
 .emoji-lg {
-  font-size: 4rem;
-  margin: 1rem 0;
+  font-size: 5rem;
+  margin: 1.5rem 0;
   animation: bounce 2s infinite;
+  display: inline-block;
 }
 
 .voucher-card {
-  background: #fdf2e9;
+  background: rgba(246, 139, 30, 0.1);
   border: 2px dashed #f68b1e;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin: 1.5rem 0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  position: relative;
 }
 
 .voucher-code {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 900;
-  color: #f68b1e;
-  letter-spacing: 2px;
+  color: #ffffff;
+  letter-spacing: 4px;
   margin-bottom: 0.5rem;
+  text-shadow: 0 2px 10px rgba(246, 139, 30, 0.5);
 }
 
 .voucher-terms {
-  font-size: 0.9rem;
-  color: #64748b;
+  font-size: 0.95rem;
+  color: var(--text-muted);
 }
 
 .success-msg {
@@ -126,6 +167,6 @@
 
 @keyframes bounce {
   0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-  40% {transform: translateY(-15px);}
-  60% {transform: translateY(-7px);}
+  40% {transform: translateY(-20px);}
+  60% {transform: translateY(-10px);}
 }
