@@ -1,0 +1,178 @@
+.wheel-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.wheel-wrapper {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  margin-bottom: 3rem;
+}
+
+.pointer {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0; 
+  height: 0; 
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 30px solid #f8fafc;
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.wheel {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  border: 8px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.5);
+  /* The segments are created via CSS clip-path or conic-gradient.
+     Using a conic gradient is easier for equal slices, but since we map divs, we use clip path. */
+}
+
+.segment {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 50%;
+  transform-origin: 0% 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* 60 degrees slice (360/6) */
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  /* But this requires specific math. Alternatively, use skew or just conic-gradient on the wheel itself. */
+}
+
+/* Let's simplify the wheel rendering using conic-gradient on the parent, 
+   but since we are using divs for text, we can use absolute positioning and rotation.
+   Actually, a classic way is: */
+.segment {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 100%;
+  height: 100%;
+  transform-origin: center center;
+  /* Instead of complex clip paths, we can use a conic gradient background on the wheel and position text absolutely. 
+     Let's rewrite this part. */
+}
+
+/* Let's use standard conic gradient approach for the Wheel */
+.wheel {
+  background: conic-gradient(
+    #10b981 0deg 60deg,
+    #ef4444 60deg 120deg,
+    #3b82f6 120deg 180deg,
+    #ef4444 180deg 240deg,
+    #f59e0b 240deg 300deg,
+    #ef4444 300deg 360deg
+  );
+}
+
+.segment {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent !important; /* override inline style */
+}
+
+.segment-text {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%) rotate(30deg); /* Adjust text rotation to fit in slice */
+  transform-origin: 50% 150px; /* Center of the wheel */
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+  white-space: nowrap;
+}
+
+.spin-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+  border: 4px solid white;
+}
+
+.spin-button:hover:not(:disabled) {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.result-panel {
+  max-width: 500px;
+  width: 100%;
+}
+
+.win-title {
+  color: #10b981;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.lose-title {
+  color: #ef4444;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.confetti, .sad-face {
+  font-size: 4rem;
+  margin: 1rem 0;
+  animation: bounce 2s infinite;
+}
+
+.voucher-card {
+  background: rgba(0,0,0,0.2);
+  border: 2px dashed #f59e0b;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.voucher-code {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.voucher-terms {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.success-msg {
+  color: #10b981;
+  font-weight: 600;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+  40% {transform: translateY(-20px);}
+  60% {transform: translateY(-10px);}
+}
