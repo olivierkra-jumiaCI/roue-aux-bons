@@ -24,36 +24,43 @@ export default async function Home() {
 
       {availableVouchers === 0 ? (
         <div style={{ 
-          background: '#111315', 
-          border: '4px solid #ef4444',
-          borderRadius: '16px',
-          padding: '3rem 2rem',
+          background: '#e11d48', 
+          border: '6px solid #ffffff',
+          borderRadius: '12px',
+          padding: '2.5rem 1.5rem',
           textAlign: 'center',
-          boxShadow: '0 20px 50px rgba(239, 68, 68, 0.4), inset 0 0 30px rgba(239, 68, 68, 0.2)',
-          transform: 'scale(1.05)',
-          animation: 'pulseGlow 2s infinite'
+          boxShadow: '0 15px 35px rgba(225, 29, 72, 0.4)',
+          transform: 'rotate(-2deg)'
         }}>
           <h2 style={{ 
-            color: '#ef4444', 
+            color: '#ffffff', 
             marginBottom: '1rem', 
             fontSize: '3.5rem', 
             fontWeight: '900',
             textTransform: 'uppercase',
-            letterSpacing: '2px',
-            textShadow: '0 0 20px rgba(239, 68, 68, 0.5)'
+            lineHeight: '1'
           }}>
-            🚨 STOCK ÉPUISÉ !
+            STOCK ÉPUISÉ !
           </h2>
           <p style={{ 
-            fontSize: '1.5rem', 
-            lineHeight: '1.5', 
+            fontSize: '1.3rem', 
+            lineHeight: '1.4', 
             color: '#ffffff',
-            fontWeight: '800',
-            textTransform: 'uppercase'
+            fontWeight: '700'
           }}>
             Tous les bons du jour ont été dévalisés !<br />
-            <span style={{ color: '#fb8500', fontSize: '1.8rem', display: 'block', marginTop: '1rem' }}>
-              Soyez plus rapide demain ! ⚡
+            <span style={{ 
+              display: 'inline-block', 
+              background: '#ffb703', 
+              color: '#282828', 
+              padding: '0.8rem 1.5rem', 
+              borderRadius: '50px', 
+              marginTop: '1.5rem',
+              fontWeight: '900',
+              textTransform: 'uppercase',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
+            }}>
+              Revenez dès demain ! 🏃‍♂️
             </span>
           </p>
         </div>
