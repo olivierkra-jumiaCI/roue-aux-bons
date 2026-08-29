@@ -15,13 +15,6 @@ export default async function Home() {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '600px', margin: '0 auto', marginTop: '10vh', textAlign: 'center', padding: '0 1rem' }}>
-      <h1 className="page-title">
-        Roue <span>Aux</span><br/>coupons
-      </h1>
-      <p style={{ textAlign: 'center', margin: '2rem 0', color: '#ffffff', fontSize: '1.2rem', fontWeight: '500' }}>
-        Inscrivez-vous pour tenter de gagner un bon de réduction !
-      </p>
-
       {availableVouchers === 0 ? (
         <div style={{ 
           background: '#e11d48', 
@@ -65,7 +58,15 @@ export default async function Home() {
           </p>
         </div>
       ) : (
-        <LoginForm />
+        <>
+          <h1 className="page-title">
+            Roue <span>Aux</span><br/>coupons
+          </h1>
+          <p style={{ textAlign: 'center', margin: '2rem 0', color: '#ffffff', fontSize: '1.2rem', fontWeight: '500' }}>
+            Inscrivez-vous pour tenter de gagner un bon de réduction !
+          </p>
+          <LoginForm />
+        </>
       )}
     </div>
   );
