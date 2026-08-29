@@ -23,11 +23,38 @@ export default async function Home() {
       </p>
 
       {availableVouchers === 0 ? (
-        <div className="glass-panel" style={{ textAlign: 'center', borderColor: '#fee2e2' }}>
-          <h2 style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '2rem', fontWeight: '900' }}>Oups !</h2>
-          <p style={{ fontSize: '1.2rem', lineHeight: '1.6', color: '#282828' }}>
-            Désolé, tous les bons du jour ont été gagnés !<br />
-            Revenez demain pour une nouvelle chance.
+        <div style={{ 
+          background: '#111315', 
+          border: '4px solid #ef4444',
+          borderRadius: '16px',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          boxShadow: '0 20px 50px rgba(239, 68, 68, 0.4), inset 0 0 30px rgba(239, 68, 68, 0.2)',
+          transform: 'scale(1.05)',
+          animation: 'pulseGlow 2s infinite'
+        }}>
+          <h2 style={{ 
+            color: '#ef4444', 
+            marginBottom: '1rem', 
+            fontSize: '3.5rem', 
+            fontWeight: '900',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            textShadow: '0 0 20px rgba(239, 68, 68, 0.5)'
+          }}>
+            🚨 STOCK ÉPUISÉ !
+          </h2>
+          <p style={{ 
+            fontSize: '1.5rem', 
+            lineHeight: '1.5', 
+            color: '#ffffff',
+            fontWeight: '800',
+            textTransform: 'uppercase'
+          }}>
+            Tous les bons du jour ont été dévalisés !<br />
+            <span style={{ color: '#fb8500', fontSize: '1.8rem', display: 'block', marginTop: '1rem' }}>
+              Soyez plus rapide demain ! ⚡
+            </span>
           </p>
         </div>
       ) : (
