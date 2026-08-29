@@ -75,7 +75,7 @@ export default function Wheel({ onSpinComplete }) {
         return;
       }
 
-      const isWin = Math.random() > 0.5;
+      const isWin = Math.random() < 0.3;
       const resultAction = isWin ? 'Win' : 'Loss';
 
       const res = await fetch('/api/spin', {
