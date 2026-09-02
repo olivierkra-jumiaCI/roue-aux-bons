@@ -59,11 +59,19 @@ export default async function Home() {
         </div>
       ) : (
         <>
-
           <p style={{ textAlign: 'center', margin: '2rem 0', color: '#ffffff', fontSize: '1.2rem', fontWeight: '500' }}>
             Inscrivez-vous pour tenter de gagner un bon de réduction !
           </p>
           <LoginForm />
+          <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+            <a href="https://www.jumia.ci/mlp-jumia-festival/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', transition: 'transform 0.2s ease' }} className="hover-scale">
+              <img 
+                src="/jumia-festival.jpg" 
+                alt="Jumia Festival - Jusqu'à -60%" 
+                style={{ width: '100%', maxWidth: '500px', borderRadius: '12px', boxShadow: '0 8px 25px rgba(0,0,0,0.3)' }} 
+              />
+            </a>
+          </div>
         </>
       )}
     </div>
