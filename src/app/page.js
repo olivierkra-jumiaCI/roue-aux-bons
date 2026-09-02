@@ -72,6 +72,52 @@ export default async function Home() {
               />
             </a>
           </div>
+
+          <div style={{ 
+            background: '#ffffff', 
+            borderRadius: '12px', 
+            padding: '2.5rem 1.5rem 1.5rem', 
+            marginTop: '2rem', 
+            marginBottom: '4rem',
+            textAlign: 'left', 
+            boxShadow: '0 8px 25px rgba(0,0,0,0.1)' 
+          }}>
+            <div style={{ borderTop: '2px solid #f3f4f6', position: 'relative', marginBottom: '2.5rem' }}>
+              <span style={{ 
+                background: '#9ca3af', 
+                color: 'white', 
+                padding: '0.5rem 1.5rem', 
+                borderRadius: '50px', 
+                position: 'absolute', 
+                top: '50%', 
+                left: '50%', 
+                transform: 'translate(-50%, -50%)', 
+                fontWeight: '800', 
+                fontSize: '1rem',
+                whiteSpace: 'nowrap'
+              }}>
+                Termes & conditions
+              </span>
+            </div>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {[
+                "Le jeu est ouvert tous les jours dans la limite des stocks de bons disponibles quotidiennement.",
+                "On ne peut tourner la roue qu'une seule fois par jour (une seule participation par jour et par personne).",
+                "En cas de victoire, le participant gagne un bon d'achat d'une valeur de 5 000 FCFA, valable pour un minimum de commande de 10 000 FCFA jusqu'au 30 Septembre inclus.",
+                "Le code de réduction s'affiche immédiatement à l'écran en cas de gain. Il n'y a pas de tirage au sort ultérieur.",
+                "Les bons d'achat gagnés ne sont pas transférables, ne peuvent être échangés contre de l'espèce, et sont applicables directement lors du passage de la commande sur Jumia.",
+                "S'inscrire pour le jeu sur la page dédiée en renseignant son nom complet, son adresse email et son contact téléphonique avant de commencer à jouer. Le jeu se déroule uniquement sur l'Application JUMIA.",
+                "En participant à ce jeu, vous donnez à Jumia le droit de vous contacter et l'autorisation d'utiliser vos informations à des fins marketing.",
+                "La décision de Jumia concernant toutes les questions relatives à cette promotion sera finale et aucune correspondance ne sera échangée.",
+                "Jumia se réserve le droit de modifier, suspendre ou annuler la promotion et les présents Termes et Conditions sans préavis en cas de force majeure."
+              ].map((term, i) => (
+                <li key={i} style={{ position: 'relative', paddingLeft: '1.5rem', marginBottom: '1.5rem', fontSize: '0.95rem', lineHeight: '1.6', color: '#4b5563', fontWeight: '500' }}>
+                  <span style={{ color: '#f97316', position: 'absolute', left: 0, top: '0', fontSize: '1.5rem', lineHeight: '1' }}>•</span>
+                  {term}
+                </li>
+              ))}
+            </ul>
+          </div>
         </>
       )}
     </div>
