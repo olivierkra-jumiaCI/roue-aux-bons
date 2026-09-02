@@ -59,9 +59,7 @@ export default async function Home() {
         </div>
       ) : (
         <>
-          <h1 className="page-title">
-            Roue <span>Aux</span><br/>coupons
-          </h1>
+
           <p style={{ textAlign: 'center', margin: '2rem 0', color: '#ffffff', fontSize: '1.2rem', fontWeight: '500' }}>
             Inscrivez-vous pour tenter de gagner un bon de réduction !
           </p>
