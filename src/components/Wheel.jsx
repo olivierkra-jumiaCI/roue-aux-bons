@@ -75,7 +75,7 @@ export default function Wheel({ onSpinComplete }) {
         return;
       }
 
-      const isWin = Math.random() < 0.3;
+      const isWin = Math.random() < 0.1;
       const resultAction = isWin ? 'Win' : 'Loss';
 
       const res = await fetch('/api/spin', {
@@ -194,8 +194,9 @@ export default function Wheel({ onSpinComplete }) {
                 <div className="voucher-card">
                   <div className="voucher-code">{resultData.voucher?.code}</div>
                   <div className="voucher-terms">
-                    Valeur : {resultData.voucher?.value}<br/>
-                    Valable pour un minimum d'achat de 30 000 FCFA.
+                    Valeur : 5 000 FCFA<br/>
+                    Valable pour un minimum d'achat de 10 000 FCFA.<br/>
+                    Valable jusqu'au 30 Septembre.
                   </div>
                 </div>
                 <p className="success-msg">
